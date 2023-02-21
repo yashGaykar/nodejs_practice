@@ -1,7 +1,9 @@
 const express = require('express');
 const mongoose= require("mongoose");
 
-const url = "mongodb+srv://yashgaykar:Gaya%40193@cluster0.nj9yven.mongodb.net/?retryWrites=true&w=majority"
+require('dotenv').config();
+
+const url = process.env.URI
 
 const app=express();
 
