@@ -2,9 +2,9 @@
   "name": "nodecrud",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon sever.js"
   },
   "author": "yash",
   "license": "ISC",
