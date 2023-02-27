@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router()
 
 const agenda = require('../jobs/index')
+const checkAuth = require('../middleware/check-auth')
 
-router.post('/results', (req, res) => {
+
+router.post('/results',checkAuth, (req, res) => {
 
     agenda.start().then(async () => {
         agenda.now('updateExamResults')
@@ -12,7 +14,7 @@ router.post('/results', (req, res) => {
     res.json({ "message": "Result is Being Updated" })
 })
 
-router.get('/results/:name', async (req, res) => {
+router.get('/results/:name',checkAuth, async (req, res) => {
     const job = await agenda.jobs({ name: req.params.name })
 
     if (job.length === 0) {

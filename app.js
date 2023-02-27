@@ -9,8 +9,8 @@ require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
 // FILE IMPORTS
 const studentsRouter = require('./api/routers/students')
 const marksRouter = require("./api/routers/exams");
-const jobsRouter=require("./api/routers/jobs")
-
+const jobsRouter = require("./api/routers/jobs")
+const adminRouter = require("./api/routers/admin")
 
 // APP SETUP
 const app = express();
@@ -20,7 +20,7 @@ app.use(express.json())
 
 
 //MONGOOSE SETUP
-const url =process.env.DATABASE_URI
+const url = process.env.DATABASE_URI
 
 mongoose
 	.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -35,7 +35,8 @@ mongoose
 // ROUTES SETUP
 app.use('/students', studentsRouter)
 app.use('/exams', marksRouter)
-app.use('/jobs',jobsRouter)
+app.use('/jobs', jobsRouter)
+app.use('/admin', adminRouter)
 
 
 app.use((req, res, next) => {

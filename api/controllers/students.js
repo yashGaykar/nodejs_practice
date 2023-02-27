@@ -33,32 +33,32 @@ exports.getStudentsById = ((req, res) => {
         })
 })
 
-exports.createStudent = (async(req, res) => {
-    Student.find({name:req.body.name})
-    .exec()
-    .then(async(student)=>{
-        if(student.length>=1){
-            res.status(404).json({"message":"Student with Name Already Exists"})
-        }
-        else{
-            const student = new Student({
-                _id: mongoose.Types.ObjectId(),
-                name: req.body.name,
-                gender: req.body.gender,
-                age: req.body.age
-            })
-            await student
-                .save()
-                .then((result) => {
-                    res.status(201).json(result)
+exports.createStudent = (async (req, res) => {
+    Student.find({ name: req.body.name })
+        .exec()
+        .then(async (student) => {
+            if (student.length >= 1) {
+                res.status(404).json({ "message": "Student with Name Already Exists" })
+            }
+            else {
+                const student = new Student({
+                    _id: mongoose.Types.ObjectId(),
+                    name: req.body.name,
+                    gender: req.body.gender,
+                    age: req.body.age
                 })
-                .catch((err) => {
-                    res.status(400).json({
-                        "error": err
+                await student
+                    .save()
+                    .then((result) => {
+                        res.status(201).json(result)
                     })
-                })
-        }
-    })
+                    .catch((err) => {
+                        res.status(400).json({
+                            "error": err
+                        })
+                    })
+            }
+        })
 })
 
 exports.updateStudentById = ((req, res) => {

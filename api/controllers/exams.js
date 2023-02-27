@@ -4,7 +4,7 @@ const Student = require('../models/student')
 const Exam = require('../models/exam')
 
 exports.addExams = async (req, res) => {
-    const {exam_name,physics,chemistry,biology,mathematics,english}=req.body
+    const { exam_name, physics, chemistry, biology, mathematics, english } = req.body
     Student.findById(req.params.id)
         .exec()
         .then((stud) => {

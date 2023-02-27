@@ -1,21 +1,23 @@
 const express = require('express');
 const router = express.Router()
 
+const checkAuth = require('../middleware/check-auth')
+
 const { getAllStudents, getStudentsById, createStudent, updateStudentById, deleteStudentById } = require('../controllers/students')
 
 // Get Students
-router.get('/', getAllStudents)
+router.get('/',checkAuth, getAllStudents)
 
 // Get Students By ID
-router.get('/:id', getStudentsById)
+router.get('/:id',checkAuth, getStudentsById)
 
 // Create Student
-router.post('/', createStudent)
+router.post('/',checkAuth, createStudent)
 
 // Update Student
-router.patch('/:id', updateStudentById)
+router.patch('/:id',checkAuth, updateStudentById)
 
 // Delete Student
-router.delete('/:id', deleteStudentById)
+router.delete('/:id',checkAuth, deleteStudentById)
 
 module.exports = router
