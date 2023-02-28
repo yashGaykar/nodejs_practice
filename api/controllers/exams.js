@@ -76,20 +76,17 @@ exports.updateExamResults = async (data) => {
         .exec()
         .then(async (exams) => {
             console.log(exams.length + " records are being updated")
-            await exams.forEach(async (exam) => {
-                const total = (exam.physics + exam.chemistry + exam.mathematics + exam.english + exam.biology)
-                console.log(total);
-                const percentage = total / 5
-                console.log(percentage);
-                const status = (percentage < 35 ? "fail" : "pass")
-                console.log(status);
+            exams.forEach(async (exam) => {
+                const total = (exam.physics + exam.chemistry + exam.mathematics + exam.english + exam.biology);
+                const percentage = total / 5;
+                const status = (percentage < 35 ? "fail" : "pass");
                 Exam.findByIdAndUpdate(exam._id, {
                     total: total,
                     percentage: percentage,
                     status: status
                 })
                     .exec()
-                    .then()
+                    .then();
             })
         })
 }

@@ -1,41 +1,60 @@
+const { jobs } = require('agenda/dist/agenda/jobs');
 const express = require('express');
 const router = express.Router()
 
 const agenda = require('../jobs/index')
 const checkAuth = require('../middleware/check-auth')
 
-
-router.post('/results',checkAuth, (req, res) => {
-
-    agenda.start().then(async () => {
-        agenda.now('updateExamResults')
+router.post('/results', async (req, res) => {
+    const job = await agenda.jobs({
+        data: req.body.key
     })
+    if (job.length === 0) {
+        agenda.start().then(async () => {
+            agenda.now(`${req.body.name}`, `${req.body.key}`)
+        })
 
-    res.json({ "message": "Result is Being Updated" })
+        res.json({ "message": "Result is Being Updated" })
+    }
+    else {
+        res.status(500).json({ "error": `Job with Key ${req.body.key} already exists. Please try with another key` })
+    }
 })
 
-router.get('/results/:name',checkAuth, async (req, res) => {
-    const job = await agenda.jobs({ name: req.params.name })
 
+router.get('/results/:key',checkAuth, async (req, res) => {
+
+    const job = await agenda.jobs({
+        data: req.params.key
+    })
     if (job.length === 0) {
         res.status(404).send('Job Not Found')
     }
     else {
-        let status
+        let job_info = {
+            _id: job[0].attrs._id,
+            name: job[0].attrs.name,
+            startedAt: job[0].attrs.lastRunAt,
+            key: job[0].attrs.body
+        }
         if (!job[0].attrs.lastFinishedAt) {
-            status = "In Progress"
+            job_info.status = "pending"
+            res.status(200).json(job_info)
         }
         else {
+            job_info.lastFinishedAt = job[0].attrs.lastFinishedAt
+
             if (job[0].attrs.failedAt) {
-                status = "Failed"
+                job_info.status = "failed"
+                job_info.failedReason = job[0].attrs.failReason
+                job_info.failedAt = job[0].attrs.failedAt
+                res.status(200).json(job_info)
             }
             else {
-                status = "Success"
+                job_info.status = "success"
+                res.status(200).json(job_info)
             }
         }
-
-        console.log(`Job status: ${status}`)
-        res.json({ "Job status": status })
     }
 
 })

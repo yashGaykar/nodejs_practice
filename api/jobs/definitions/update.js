@@ -2,9 +2,10 @@ const { JobHandlers } = require("../handlers");
 
 
 
-const updateDefinitions=(agenda)=>{
+const updateDefinitions = (agenda) => {
 
-    agenda.define("updateExamResults",JobHandlers.updateExamResults);
+    agenda.define("updateExamResults", JobHandlers.updateExamResults);
+
 
 }
 
