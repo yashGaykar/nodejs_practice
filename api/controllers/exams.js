@@ -4,7 +4,7 @@ const Student = require('../models/student')
 const Exam = require('../models/exam')
 
 exports.addExams = async (req, res) => {
-    const {exam_name,physics,chemistry,biology,mathematics,english}=req.body
+    const { exam_name, physics, chemistry, biology, mathematics, english } = req.body
     Student.findById(req.params.id)
         .exec()
         .then((stud) => {
@@ -72,24 +72,22 @@ exports.getExams = async (req, res) => {
 
 
 exports.updateExamResults = async (data) => {
+    console.log(abhishek)
     Exam.find({ "status": "pending" })
         .exec()
         .then(async (exams) => {
             console.log(exams.length + " records are being updated")
-            await exams.forEach(async (exam) => {
-                const total = (exam.physics + exam.chemistry + exam.mathematics + exam.english + exam.biology)
-                console.log(total);
-                const percentage = total / 5
-                console.log(percentage);
-                const status = (percentage < 35 ? "fail" : "pass")
-                console.log(status);
+            exams.forEach(async (exam) => {
+                const total = (exam.physics + exam.chemistry + exam.mathematics + exam.english + exam.biology);
+                const percentage = total / 5;
+                const status = (percentage < 35 ? "fail" : "pass");
                 Exam.findByIdAndUpdate(exam._id, {
                     total: total,
                     percentage: percentage,
                     status: status
                 })
                     .exec()
-                    .then()
+                    .then();
             })
         })
 }
