@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router()
 
 const agenda = require('../jobs/index')
+const checkAuth = require('../middleware/check-auth')
 
 router.post('/results', async (req, res) => {
     const job = await agenda.jobs({
@@ -20,7 +21,8 @@ router.post('/results', async (req, res) => {
     }
 })
 
-router.get('/results/:key', async (req, res) => {
+
+router.get('/results/:key',checkAuth, async (req, res) => {
 
     const job = await agenda.jobs({
         data: req.params.key
