@@ -72,7 +72,6 @@ exports.getExams = async (req, res) => {
 
 
 exports.updateExamResults = async (data) => {
-    console.log(abhishek)
     Exam.find({ "status": "pending" })
         .exec()
         .then(async (exams) => {
