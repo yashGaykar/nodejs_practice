@@ -7,10 +7,10 @@ const bodyParser = require("body-parser")
 require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
 
 // FILE IMPORTS
-const studentsRouter = require('./api/routers/students')
+const studentsRouter = require('./api/routers/users')
 const marksRouter = require("./api/routers/exams");
 const jobsRouter = require("./api/routers/jobs")
-const adminRouter = require("./api/routers/admin")
+const adminRouter = require("./api/routers/login.js")
 
 // APP SETUP
 const app = express();
