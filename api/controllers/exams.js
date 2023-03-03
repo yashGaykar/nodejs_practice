@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
-const Student = require('../models/student')
+const User = require('../models/user')
 const Exam = require('../models/exam')
 
 exports.addExams = async (req, res) => {
     const { exam_name, physics, chemistry, biology, mathematics, english } = req.body
-    Student.findById(req.params.id)
+    User.findById(req.params.id, { role: "student" })
         .exec()
-        .then((stud) => {
-            if (stud) {
+        .then((user) => {
+            if (user) {
                 Exam.find({ studentId: req.params.id, exam_name: exam_name })
                     .exec()
                     .then(async (exam) => {
@@ -44,6 +44,8 @@ exports.addExams = async (req, res) => {
                                 });
                         }
                     })
+            } else {
+                res.status(400).json({ "message": "Student Not Found" })
             }
         })
         .catch((err) => {
