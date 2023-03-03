@@ -2,13 +2,35 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
 
 const User = require('../models/user')
+const Exam = require('../models/exam')
 
 exports.getAllUsers = ((req, res) => {
-    User.find()
-        .select('_id name age gender password, role, email')
+    User.find({ "role": "student" })
+        .select('_id name age gender password role email')
         .exec()
-        .then((user) => {
-            res.status(200).json(user)
+        .then(async (users) => {
+
+
+            const newUser = await Promise.all(users.map(async (user) => {
+                const exam = await Exam.find({ studentId: user._id }).select('_id exam_name physics chemistry biology mathematics english percentage total status')
+                const newUser = user.toObject();
+                newUser.results = exam
+                return newUser
+            }))
+            res.status(200).json(newUser)
+
+
+            // users.forEach((user) => {
+            //     Exam.find({ "studentId": (user._id).toString })
+            //         .exec()
+            //         .then((results) => {
+            //             console.log(results)
+            //             // user.result=results
+            //         })
+            //     console.log((user._id).toString)
+
+            // })
+            // res.status(200).json(exam)
         })
         .catch((err) => {
             res.status(400).json({
@@ -17,13 +39,15 @@ exports.getAllUsers = ((req, res) => {
         })
 })
 
-exports.getUsersById = ((req, res) => {
+exports.getUsersById = (async (req, res) => {
     id = req.params.id
-    User.findById(id)
-        .select('_id name age gender password, role, email')
+    await User.findById(id).select('_id name age gender password role email')
         .exec()
-        .then((user) => {
-            res.status(200).json(user)
+        .then(async (user) => {
+            const exam = await Exam.find({ studentId: id }).select('_id exam_name physics chemistry biology mathematics english percentage total status')
+            const newUser = user.toObject();
+            newUser.results = exam;
+            return res.json(newUser)
         })
         .catch((err) => {
             res.status(400).json({
