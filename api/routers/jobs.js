@@ -7,7 +7,7 @@ const checkAuth = require('../middleware/check-auth')
 const checkRole = require('../middleware/check-role')
 
 
-router.post('/results', checkAuth, checkRole(['admin','teacher']), async (req, res) => {
+router.post('/results', checkAuth, checkRole(['admin', 'teacher']), async (req, res) => {
     const job = await agenda.jobs({
         data: req.body.key
     })
@@ -24,7 +24,7 @@ router.post('/results', checkAuth, checkRole(['admin','teacher']), async (req, r
 })
 
 
-router.get('/results/:key', checkAuth, checkRole(['admin','teacher']), async (req, res) => {
+router.get('/results/:key', checkAuth, checkRole(['admin', 'teacher']), async (req, res) => {
 
     const job = await agenda.jobs({
         data: req.params.key
